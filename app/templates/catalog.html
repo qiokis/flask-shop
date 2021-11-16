@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+        <div class="row">
+        {% if categories %}
+            {% for cat in categories %}
+            <div class="col-4">
+                {% include '_category.html' %}
+            </div>
+            {% endfor %}
+        {% endif %}
+            <div class="col-4">
+                {% include '_add_new.html' %}
+            </div>
+        </div>
+{% endblock %}

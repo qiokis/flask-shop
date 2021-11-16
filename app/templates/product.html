@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div>
+    <h1>{{ prod.name }}</h1>
+    <img src="../static/images/{{ prod.picture }}" class="card-img-top" alt="...">
+  </div>
+  <div>
+    <p>{{ prod.price }}</p>
+    <p>{{ prod.mark }}</p>
+  </div>
+
+  <p>{{ category_name }}</p>
+  <p>{{ prod.description }}</p>
+
+{% endblock %}
