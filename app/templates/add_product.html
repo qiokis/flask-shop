@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="" method="post" name="add_category">
+    <form action="" method="post" name="add_category" enctype=multipart/form-data>
         {{ form.hidden_tag() }}
         <p>
             Category:<br>
@@ -16,7 +16,7 @@
             {{ form.description }}<br>
         </p>
         <p>
-            Path to picture:<br>
+            Picture:<br>
             {{ form.picture }}<br>
         </p>
         <p>

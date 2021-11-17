@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="" method="post" name="add_category">
+    <form action="" method="post" name="add_category" enctype=multipart/form-data>
         {{ form.hidden_tag() }}
         <p>
             Name:<br>
-            {{form.name}}<br>
+            {{ form.name }}<br>
         </p>
         <p>
-            Path to picture:<br>
-            {{ form.picture }}<br>
+            Picture:<br>
+            {{ form.picture }}
         </p>
         <p><input type="submit" value="add"></p>
-        <p><a href="{{ url_for('index') }}"><input type="button" value="Home"></a></p>
     </form>
+    <p><a href="{{ url_for('index') }}"><input type="button" value="Home"></a></p>
 {% endblock %}
