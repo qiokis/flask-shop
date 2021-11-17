@@ -1,12 +1,17 @@
-from app import app, db, login_manager
+import os
+
+from app import app, db
 from app.models import Category, Product, User
 from flask import render_template, request, redirect, url_for, flash
 from app.forms import CategoryForm, ProductForm, UserRegistrationForm, UserLoginForm
-from app.utils import check_user_existence
+from app.utils import check_user_existence, allowed_file, generate_filename
 from flask_login import current_user, login_required, login_user, logout_user
+from werkzeug.urls import url_parse
 
 
 @app.route('/')
+@app.route('/index')
+@app.route('/home')
 def index():
     return render_template('index.html', title='Test')
 
@@ -40,10 +45,18 @@ def product(product_id):
 @login_required
 def add_category():
     title = 'Add category'
-    form = CategoryForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
-        c = Category(name=form.name.data, picture=form.picture.data)
+    form = CategoryForm()
+    if form.validate_on_submit():
+        c = Category(name=form.name.data)
         db.session.add(c)
+        db.session.commit()
+        filename = None
+        if form.picture.data:
+            filename = form.picture.data.filename
+            if allowed_file(filename):
+                filename, filepath = generate_filename(filename, c.id, 'category')
+                form.picture.data.save(filepath)
+        c.picture = filename
         db.session.commit()
         return redirect(url_for('add_category'))
     return render_template('add_category.html', form=form, title=title)
@@ -53,13 +66,21 @@ def add_category():
 @login_required
 def add_product(category_id):
     title = 'Add product'
-    form = ProductForm(request.form)
+    form = ProductForm()
     c = Category.query.filter_by(id=category_id).first()
     category_name = c.name
-    if request.method == 'POST' and form.validate_on_submit():
+    if form.validate_on_submit():
         p = Product(category_id=category_id, name=form.name.data, description=form.description.data,
-                    picture=form.picture.data, price=form.price.data, mark=form.mark.data)
+                    price=form.price.data, mark=form.mark.data)
         db.session.add(p)
+        db.session.commit()
+        filename = None
+        if form.picture.data:
+            filename = form.picture.data.filename
+            if allowed_file(filename):
+                filename, filepath = generate_filename(filename, p.id, 'product')
+                form.picture.data.save(filepath)
+        p.picture = filename
         db.session.commit()
         return redirect(url_for('add_product', category_id=category_id, category_name=category_name))
     return render_template('add_product.html', form=form, category_id=category_id,
@@ -69,17 +90,23 @@ def add_product(category_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     title = 'Registration'
+
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = UserRegistrationForm()
-    if form.validate_on_submit():
+
+    if request.method == 'POST' and form.validate_on_submit():
         access = True
+
         if check_user_existence(username=form.username.data):
             flash('Username is already taken')
             access = False
+
         if check_user_existence(email=form.email.data):
             flash('Email is already taken')
             access = False
+
         if access:
             user = User(name=form.name.data, surname=form.surname.data, username=form.username.data,
                         email=form.email.data)
@@ -88,25 +115,35 @@ def register():
             db.session.commit()
             flash('You have been successfully registered')
             return redirect(url_for('register'))
+        else:
+            return redirect(url_for('register'))
+
     return render_template('register.html', form=form, title=title)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = UserLoginForm()
+
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+
         if not user:
             flash('User does not exist')
             return redirect(url_for('login'))
         access = user.check_password(form.password.data)
+
         if not access:
             flash('Wrong password or username')
             return redirect(url_for('login'))
         login_user(user)
+
         return redirect(url_for('index'))
+
     return render_template('login.html', form=form)
 
 
