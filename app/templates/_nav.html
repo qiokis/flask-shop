@@ -13,8 +13,18 @@
       </ul>
 
       <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
+        {% if not current_user.is_anonymous %}
+          <a href="{{ url_for('logout') }}">
+            <button type="button" class="btn btn-outline-primary me-2">Logout</button>
+          </a>
+        {% else %}
+          <a href="{{ url_for('login') }}">
+            <button type="button" class="btn btn-outline-primary me-2">Login</button>
+          </a>
+          <a href="{{ url_for('register') }}">
+            <button type="button" class="btn btn-primary">Sign-up</button>
+          </a>
+        {% endif %}
       </div>
     </header>
   </div>

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include '_flashes.html' %}
+    <form action="" method="post" name="register">
+        {{ form.hidden_tag() }}
+        <p>
+            Name: <br>
+            {{ form.name }}
+            {% for error in form.name.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Surname: <br>
+            {{ form.surname }}
+            {% for error in form.surname.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Username: <br>
+            {{ form.username }}
+            {% for error in form.username.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Email: <br>
+            {{ form.email }}
+            {% for error in form.email.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Password: <br>
+            {{ form.password }}
+            {% for error in form.password.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Repeat password: <br>
+            {{ form.password2 }}
+            {% for error in form.password2.errors %}-->
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p><input type="submit" value="register"></p>
+        <p><a href="{{ url_for('index') }}"><input type="button" value="Home"></a></p>
+    </form>
+{% endblock %}

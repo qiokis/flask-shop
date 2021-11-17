@@ -8,8 +8,10 @@
             </div>
             {% endfor %}
         {% endif %}
-            <div class="col-4">
-                {% include '_add_new.html' %}
-            </div>
+            {% if current_user.is_authenticated and current_user.is_super() %}
+                <div class="col-4">
+                    {% include '_add_new.html' %}
+                </div>
+            {% endif %}
         </div>
 {% endblock %}
