@@ -33,3 +33,8 @@ class ProductForm(FlaskForm):
 
 class CartForm(FlaskForm):
     quantity = IntegerField('quantity', default=1, validators=[InputRequired(), NumberRange(min=1)])
+
+
+class PostForm(FlaskForm):
+    name = StringField('name', validators=[InputRequired()])
+    picture = FileField('picture', validators=[InputRequired()])
