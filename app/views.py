@@ -1,12 +1,11 @@
 import os
 
 from app import app, db
-from app.models import Category, Product, User, Cart
+from app.models import Category, Product, User, Cart, Post
 from flask import render_template, request, redirect, url_for, flash
-from app.forms import CategoryForm, ProductForm, UserRegistrationForm, UserLoginForm, CartForm
+from app.forms import CategoryForm, ProductForm, UserRegistrationForm, UserLoginForm, CartForm, PostForm
 from app.utils import check_user_existence, allowed_file, generate_filename
 from flask_login import current_user, login_required, login_user, logout_user
-
 
 
 @app.route('/')
