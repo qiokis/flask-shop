@@ -1,12 +1,12 @@
 import os
 
 from app import app, db
-from app.models import Category, Product, User
+from app.models import Category, Product, User, Cart
 from flask import render_template, request, redirect, url_for, flash
-from app.forms import CategoryForm, ProductForm, UserRegistrationForm, UserLoginForm
+from app.forms import CategoryForm, ProductForm, UserRegistrationForm, UserLoginForm, CartForm
 from app.utils import check_user_existence, allowed_file, generate_filename
 from flask_login import current_user, login_required, login_user, logout_user
-from werkzeug.urls import url_parse
+
 
 
 @app.route('/')
@@ -24,7 +24,7 @@ def catalog():
     return render_template('catalog.html', title=title, categories=categories, new=new)
 
 
-@app.route('/catalog/<category_id>')
+@app.route('/catalog/<int:category_id>')
 def products(category_id):
     prods = Product.query.filter_by(category_id=category_id)
     category = Category.query.filter_by(id=category_id).first()
@@ -33,12 +33,22 @@ def products(category_id):
     return render_template('products.html', prods=prods, new=new, category_id=category_id, title=title)
 
 
-@app.route('/product/<product_id>')
+@app.route('/product/<int:product_id>', methods=['GET', 'POST'])
 def product(product_id):
     p = Product.query.filter_by(id=product_id).first()
     title = f'{p.name}'
     c = Category.query.filter_by(id=p.category_id).first()
-    return render_template('product.html', prod=p, category_name=c.name, title=title)
+    form = CartForm()
+    if form.validate_on_submit():
+        c = Cart.query.filter_by(user_id=current_user.id).filter_by(product_id=product_id).first()
+        if c:
+            c.quantity += form.quantity.data
+        else:
+            c = Cart(user_id=current_user.id, product_id=product_id, quantity=form.quantity.data)
+            db.session.add(c)
+        db.session.commit()
+        return redirect(url_for('product', product_id=product_id))
+    return render_template('product.html', prod=p, category_name=c.name, title=title, form=form)
 
 
 @app.route('/add_category', methods=['GET', 'POST'])
@@ -62,7 +72,7 @@ def add_category():
     return render_template('add_category.html', form=form, title=title)
 
 
-@app.route('/catalog/<category_id>/add_product', methods=['GET', 'POST'])
+@app.route('/catalog/<int:category_id>/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product(category_id):
     title = 'Add product'
@@ -87,6 +97,7 @@ def add_product(category_id):
                            category_name=category_name, title=title)
 
 
+# TODO если какое то поле не проходит валидацию, то все поля сбрасываются
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     title = 'Registration'
@@ -157,4 +168,26 @@ def logout():
 @app.route('/about')
 def about():
     pass
+
+
+# # TODO Не используется
+# @app.route('/add_to_cart/<int:product_id>')
+# @login_required
+# def add_to_cart(product_id):
+#     cart = Cart(user_id=current_user.id, product_id=product_id)
+#     db.session.add(cart)
+#     db.session.commit()
+#     return redirect(url_for('product', product_id=product_id))
+
+
+@app.route('/cart')
+@login_required
+def cart():
+    cart = Cart.query.filter_by(user_id=current_user.id)
+    item_list = list()
+    for c in cart:
+        item_list.append({'product': Product.query.get(c.product_id), 'quantity': c.quantity})
+    return render_template('cart.html', items=item_list)
+
+
 
