@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="" method="post" name="add_category" enctype=multipart/form-data>
+        {{ form.hidden_tag() }}
+        <p>
+            Name:<br>
+            {{ form.name }}<br>
+        </p>
+        <p>
+            Picture:<br>
+            {{ form.picture }}<br>
+        </p>
+        <p><input type="submit" value="add"></p>
+    </form>
+
+
+{% endblock %}
