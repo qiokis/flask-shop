@@ -30,6 +30,9 @@ class User(db.Model, UserMixin):
     def is_super(self):
         return True if self.role == 1 else False
 
+    def get_cart_content(self):
+        return Cart.query.filter_by(user_id=self.id).count()
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,3 +58,13 @@ class Product(db.Model):
 
     def __repr__(self):
         return f'<Product>-Name:{self.name}'
+
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    quantity = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f'<Cart>-UserID:{self.user_id}-ProductID:{self.product_id}-Quantity:{self.quantity}'
