@@ -17,6 +17,9 @@
           <a href="{{ url_for('logout') }}">
             <button type="button" class="btn btn-outline-primary me-2">Logout</button>
           </a>
+          <a href="{{ url_for('cart') }}">
+            <button type="button" class="btn btn-outline-primary me-2">{{ current_user.get_cart_content() }}</button>
+          </a>
         {% else %}
           <a href="{{ url_for('login') }}">
             <button type="button" class="btn btn-outline-primary me-2">Login</button>
