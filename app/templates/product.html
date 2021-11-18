@@ -12,5 +12,15 @@
 
   <p>{{ category_name }}</p>
   <p>{{ prod.description }}</p>
+  {% if not current_user.is_anonymous %}
+    <form action="" method="post" name="add_to_cart">
+        {{ form.hidden_tag() }}
+        <p>
+            Quantity:<br>
+            {{ form.quantity }}<br>
+        </p>
+      <p><input type="submit" value="add"></p>
+    </form>
+  {% endif %}
 
 {% endblock %}
