@@ -13,7 +13,16 @@ from flask_login import current_user, login_required, login_user, logout_user
 @app.route('/index')
 @app.route('/home')
 def index():
-    return render_template('index.html', title='Test')
+    posts = Post.query.all()
+    if len(posts) >= 2:
+        first_post, posts = posts[0], posts[1:]
+    elif len(posts) == 1:
+        first_post = posts[0]
+    else:
+        # TODO Вывод если постов нет
+        pass
+    title = 'General'
+    return render_template('index.html', title=title, posts=posts, first_post=first_post)
 
 
 @app.route('/catalog')
