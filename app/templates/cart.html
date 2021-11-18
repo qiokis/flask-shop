@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for item in items %}
+        <div>
+            <img src="../static/images/product/{{ item.product.picture }} " class="card-img-top cart_image" alt="...">
+            <p>{{ item.product.name }}-{{ item.product.price }}-{{ item.quantity }}</p>
+        </div>
+
+    {% endfor %}
+{% endblock %}
