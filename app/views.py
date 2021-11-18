@@ -190,4 +190,22 @@ def cart():
     return render_template('cart.html', items=item_list)
 
 
+@app.route('/add_post', methods=['GET', 'POST'])
+@login_required
+def add_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        p = Post(name=form.name.data)
+        db.session.add(p)
+        db.session.commit()
+        filename = None
+        if form.picture.data:
+            filename = form.picture.data.filename
+            if allowed_file(filename):
+                filename, filepath = generate_filename(filename, p.id, 'post')
+                form.picture.data.save(filepath)
+        p.picture = filename
+        db.session.commit()
+        return redirect(url_for('add_post'))
+    return render_template('add_post.html', form=form)
 
