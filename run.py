@@ -1,4 +1,3 @@
-import os
 from app import app, utils
 
 if __name__ == '__main__':
