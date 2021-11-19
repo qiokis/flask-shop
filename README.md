@@ -1,8 +1,13 @@
 # FLASK Shop
 ## Pet project after learning [Flask](https://flask.palletsprojects.com)
 ____
-# Dependencies
-run 'pip install -r requirements.txt'
+# Installation
+## Dependencies
+To install dependencies run 'pip install -r requirements.txt'
+## Database
+1. Create db. run 'flask db init'
+2. Create mirgations. run 'flask db migrate'
+3. Apply changes in db. run 'flask db upgrade'
 ____
 # Usage
 For start server run 'run.py'
