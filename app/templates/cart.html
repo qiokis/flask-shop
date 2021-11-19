@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for item in items %}
-        <div>
-            <img src="../static/images/product/{{ item.product.picture }} " class="card-img-top cart_image" alt="...">
-            <p>{{ item.product.name }}-{{ item.product.price }}-{{ item.quantity }}</p>
+        {% for item in items %}
+        <div class="row mb-5 align-items-center ">
+            <div class="col">
+                 <img src="../static/images/product/{{ item.product.picture }} " class="card-img-top cart-image" alt="...">
+            </div>
+            <div class="col">
+                <p>Name: {{ item.product.name }}</p>
+                <p>Price: {{ item.product.price }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+            </div>
+            <div class="col">
+                <a href="{{ url_for('delete_from_cart', product_id=item.product.id) }}" class="btn btn-primary" role="button">Delete</a>
+            </div>
         </div>
-
     {% endfor %}
 {% endblock %}
