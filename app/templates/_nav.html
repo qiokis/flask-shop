@@ -9,7 +9,7 @@
         <li><a href="{{ url_for('catalog') }}" class="nav-link px-2 link-dark">Catalog</a></li>
         <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
         <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link px-2 link-dark">About</a></li>
         {% if current_user.is_authenticated %}
           {% if current_user.is_super() %}
             <li><a href="{{ url_for('add_post') }}" class="nav-link px-2 link-dark">Add post</a></li>
@@ -19,19 +19,11 @@
 
       <div class="col-md-3 text-end">
         {% if not current_user.is_anonymous %}
-          <a href="{{ url_for('logout') }}">
-            <button type="button" class="btn btn-outline-primary me-2">Logout</button>
-          </a>
-          <a href="{{ url_for('cart') }}">
-            <button type="button" class="btn btn-outline-primary me-2">{{ current_user.get_cart_content() }}</button>
-          </a>
+          <a href="{{ url_for('logout') }}" class="btn btn-primary" role="button">Logout</a>
+          <a href="{{ url_for('cart') }}" class="btn btn-primary" role="button">{{ current_user.get_cart_content() }}</a>
         {% else %}
-          <a href="{{ url_for('login') }}">
-            <button type="button" class="btn btn-outline-primary me-2">Login</button>
-          </a>
-          <a href="{{ url_for('register') }}">
-            <button type="button" class="btn btn-primary">Sign-up</button>
-          </a>
+          <a href="{{ url_for('login') }}" class="btn btn-primary" role="button">Login</a>
+          <a href="{{ url_for('register') }}" class="btn btn-primary" role="button">Register</a>
         {% endif %}
       </div>
     </header>
