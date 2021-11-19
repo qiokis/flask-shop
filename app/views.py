@@ -13,6 +13,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 @app.route('/home')
 def index():
     posts = Post.query.all()
+    first_post = None
     if len(posts) >= 2:
         first_post, posts = posts[0], posts[1:]
     elif len(posts) == 1:
@@ -36,7 +37,7 @@ def catalog():
 def products(category_id):
     prods = Product.query.filter_by(category_id=category_id)
     category = Category.query.filter_by(id=category_id).first()
-    title = f'{category}'
+    title = f'{category.name}'
     new = {'fun': 'add_product', 'name': 'Добавить товар'}
     return render_template('products.html', prods=prods, new=new, category_id=category_id, title=title)
 
@@ -147,6 +148,7 @@ def login():
         return redirect(url_for('index'))
 
     form = UserLoginForm()
+    title = 'Login'
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -163,7 +165,7 @@ def login():
 
         return redirect(url_for('index'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, title=title)
 
 
 @app.route('/logout')
@@ -175,7 +177,8 @@ def logout():
 
 @app.route('/about')
 def about():
-    pass
+    title = 'About'
+    return render_template('about.html', title=title)
 
 
 # # TODO Не используется
@@ -193,14 +196,26 @@ def about():
 def cart():
     cart = Cart.query.filter_by(user_id=current_user.id)
     item_list = list()
+    title = 'Cart'
     for c in cart:
         item_list.append({'product': Product.query.get(c.product_id), 'quantity': c.quantity})
-    return render_template('cart.html', items=item_list)
+    return render_template('cart.html', items=item_list, title=title)
+
+
+@app.route('/delete_from_cart/<int:product_id>')
+def delete_from_cart(product_id):
+    cart = Cart.query.filter_by(product_id=product_id).filter_by(user_id=current_user.id).first()
+    print(cart)
+    if cart:
+        db.session.delete(cart)
+        db.session.commit()
+    return redirect(url_for('cart'))
 
 
 @app.route('/add_post', methods=['GET', 'POST'])
 @login_required
 def add_post():
+    title = 'Add post'
     form = PostForm()
     if form.validate_on_submit():
         p = Post(name=form.name.data)
@@ -215,5 +230,6 @@ def add_post():
         p.picture = filename
         db.session.commit()
         return redirect(url_for('add_post'))
-    return render_template('add_post.html', form=form)
+    return render_template('add_post.html', form=form, title=title)
+
 
