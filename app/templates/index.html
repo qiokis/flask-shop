@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="carouselExampleFade" class="carousel slide carousel-fade w-100" data-bs-ride="carousel">
-  <div class="carousel-inner">
+<div id="carouselExampleFade" class="carousel slide carousel-fade bt-carousel" data-bs-ride="carousel">
+  <div class="carousel-inner" >
     {% if first_post %}
       <div class="carousel-item active">
       <img src="../static/images/post/{{ first_post.picture }}" class="d-block w-100" alt="...">
