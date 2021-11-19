@@ -1,8 +1,8 @@
 <a href="{{ url_for('products', category_id=cat.id) }}">
-  <div class="card" style="width: 18rem;">
-    <img src="../static/images/category/{{ cat.picture }} " class="card-img-top" alt="...">
+  <div class="card align-items-center" style="width: 18rem;">
+    <img src="../static/images/category/{{ cat.picture }} " class="card-img-top catalog-image" alt="...">
     <div class="card-body">
-      <p class="card-text">{{ cat.name }}</p>
+      <p class="card-text fw-normal">{{ cat.name }}</p>
     </div>
   </div>
 </a>
