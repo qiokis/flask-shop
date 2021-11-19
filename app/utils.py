@@ -11,7 +11,8 @@ def folders_setup():
     folders = ['app\\static', 'app\\static\\images']
 
     folders.extend([f'{folders[1]}\\category',
-                    f'{folders[1]}\\product'])
+                    f'{folders[1]}\\product',
+                    f'{folders[1]}\\post'])
     for folder in folders:
         if not os.path.exists(folder):
             os.mkdir(folder)
@@ -35,7 +36,3 @@ def generate_filename(filename, file_id, addition):
     filename = md5(f'{file_id}-{filename}'.encode()).hexdigest()
     filename += f'.{ext}'
     return filename, os.path.join(app.config['UPLOAD_FOLDER']+f'\\{addition}', filename)
-
-if __name__ == '__main__':
-    test = 'qioki.txt'
-    print(generate_filename(test))
