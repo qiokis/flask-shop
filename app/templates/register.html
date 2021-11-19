@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% include '_flashes.html' %}
     <form action="" method="post" name="register">
         {{ form.hidden_tag() }}
         <p>
@@ -46,7 +45,7 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p><input type="submit" value="register"></p>
+        <p><input type="submit" value="Register"></p>
         <p><a href="{{ url_for('index') }}"><input type="button" value="Home"></a></p>
     </form>
 {% endblock %}

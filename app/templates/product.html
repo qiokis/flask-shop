@@ -6,11 +6,21 @@
     <img src="../static/images/product/{{ prod.picture }}" class="card-img-top" alt="...">
   </div>
   <div>
-    <p>{{ prod.price }}</p>
-    <p>{{ prod.mark }}</p>
+    <p>Price: {{ prod.price }}</p>
+    <p>Mark: {{ prod.mark }}</p>
   </div>
 
-  <p>{{ category_name }}</p>
-  <p>{{ prod.description }}</p>
+  <p>Category: {{ category_name }}</p>
+  <p>Description: {{ prod.description }}</p>
+  {% if not current_user.is_anonymous %}
+    <form action="" method="post" name="add_to_cart">
+        {{ form.hidden_tag() }}
+        <p>
+            Quantity:<br>
+            {{ form.quantity }}<br>
+        </p>
+      <p><input type="submit" value="add"></p>
+    </form>
+  {% endif %}
 
 {% endblock %}
